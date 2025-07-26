@@ -78,3 +78,55 @@
    - Issue: The search Input wasn't responsive on different screens, it kept displaying on small devices which distorted the ui.
    - Fix: I've used Tailwind's responsive utilities and now the header is responsive.
 
+
+### [SearchInput.tsx component]
+1. Debounce logic
+   - Issue: Issue: Every keystroke was triggering onSearch, causing unnecessary re-renders or API calls.
+   - Fix: Introduced a reusable useDebounce hook to delay the onSearch callback until the user stops typing.
+2. useEffect with stale or duplicated state
+   - Issue: Two useEffect hooks were managing innerValue, leading to unnecessary renders and stale values.
+   - Fix: Proper dependency management and separation of concerns: one effect sets query from initialValue, and another triggers onSearch using the debounced value.
+3. Form handling
+   - Issue: There was no form element; pressing "Enter" wouldn't trigger search.
+   - Fix: Wrapped input in a <form> with onSubmit to support accessibility and keyboard behavior.
+4. Accessibility
+   - Issue: The search icon was purely decorative but lacked aria-hidden, and the input field had no label.
+   - Fix: Added aria-hidden to the icon and included a visually hidden <label> for screen readers.
+
+### [SearchHero.tsx component]
+1. DOM structure
+   - Issue: Unnecessary wrapping <div> increased DOM depth.
+   - Fix: Removed redundant wrapper to keep DOM clean and maintainable.
+2. Accessibility
+   - Issue: img tag lacked alt text.
+   - Fix: Added alt="Abstract background" to improve accessibility.
+   - Issue: No semantic sectioning or ARIA attributes.
+   - Fix: Used <section> and aria-label to clarify intent to assistive tech.
+3. Maintainability
+   - Issue: Layout behavior like mt-6 depends on SearchInput being used in a specific layout context.
+   - Fix: Ensured SearchInput controls its own margin/padding.
+4. Best Practices
+   - Issue: Hardcoded search logic and structure were tightly coupled.
+   - Fix: Kept the onSearch logic separate and clean, ready to plug into real search logic later.
+
+### [TagList.tsx component]
+1. Missing semantic structure
+   - Issue: The component uses only <div> elements, which doesn’t provide semantic meaning.
+   - Fix: Replaced the outer container with a <section> and the title with a <h2> to improve accessibility and semantics.
+2. Missing aria-label / role
+   - Issue: There is no ARIA labeling or landmark role to inform assistive technologies of the list's purpose.
+   - Fix: Added aria-label to the <section> to describe the group of tags for screen readers.
+3. No keyboard interactivity
+   - Issue: Badges are styled as clickable (cursor-pointer) but are not interactive for keyboard users.
+   - Fix: Wrapped each tag inside a <button> to make them fully accessible and interactive, with proper semantics.
+4. Tag component reusability
+   - Issue: If Badge is meant to be purely visual, onClick/cursor-pointer should be avoided unless it's interactive.
+   - Fix: Converted to <button> where applicable, or removed cursor-pointer if tags are not meant to be clicked.
+
+### [SearchPage.tsx component]
+1. Unnecessary <div> wrapper
+   - Issue: The outer <div> serves no semantic or layout purpose.
+   - Fix: Removed it to reduce DOM depth.
+2. Missing semantic structure
+   - Issue: The <main> tag is used correctly, but there's no semantic heading or section grouping for content blocks.
+   - Fix: Wrapped tag groups (TagList) in <section>s with proper aria-labels or headings if needed.

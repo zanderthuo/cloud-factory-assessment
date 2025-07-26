@@ -1,26 +1,32 @@
-import { Badge } from '@/components/common/badge'
+import { Badge } from '@/components/common/badge';
 
 interface TagListProps {
-  title: string
-  tags: string[]
+  title: string;
+  tags: string[];
+  onTagClick?: (tag: string) => void;
 }
 
-function TagList({ title, tags }: TagListProps) {
+function TagList({ title, tags, onTagClick }: TagListProps) {
   return (
-    <div className='mt-8 px-6 max-w-5xl mx-auto'>
-      <div className='text-white text-lg font-semibold mb-4'>{title}</div>
-      <div className='flex flex-wrap gap-3'>
-        {tags.map(tag => (
-          <Badge
+    <section
+      aria-label={`${title} tags`}
+      className="mt-8 px-6 max-w-5xl mx-auto"
+    >
+      <h2 className="text-white text-lg font-semibold mb-4">{title}</h2>
+      <div className="flex flex-wrap gap-3">
+        {tags.map((tag) => (
+          <button
             key={tag}
-            className='bg-gray-800 text-white hover:bg-gray-700 cursor-pointer'
+            type="button"
+            onClick={() => onTagClick?.(tag)}
+            className="bg-gray-800 text-white hover:bg-gray-700 cursor-pointer rounded-md px-3 py-1 text-sm"
           >
-            {tag}
-          </Badge>
+            <Badge className="bg-transparent border-none shadow-none">{tag}</Badge>
+          </button>
         ))}
       </div>
-    </div>
-  )
+    </section>
+  );
 }
 
-export default TagList
+export default TagList;
