@@ -15,8 +15,9 @@
 
 1. ...
    - Issue: The current codebase has most of it's code in the components folder which makes it hard to navigate.
-   - Fix: Use the clean architecture principle which will help separate concerns into presentation, domain, and infrastructure layers. I have the following folders now 
+   - Fix: Use the clean architecture principle which will help separate concerns into presentation, domain, and infrastructure layers. I have the following folders now
       in the main src folder
+<code>
          src/
             │
             ├── app/                      # Application setup and global configuration
@@ -56,7 +57,7 @@
             ├── App.tsx                   # App entry point
             └── main.tsx                  # Vite entry
 
-
+</code>
 
 ### [App.tsx file refactor]
 1. File/Component separation
@@ -130,3 +131,27 @@
 2. Missing semantic structure
    - Issue: The <main> tag is used correctly, but there's no semantic heading or section grouping for content blocks.
    - Fix: Wrapped tag groups (TagList) in <section>s with proper aria-labels or headings if needed.
+
+### [Input.tsx component]
+1. Component composability
+   - Issue: ref was not forwarded, which blocks use in form, focus(), and validation.\
+   - Fix: Used React.forwardRef to forward the ref to the <input> element.
+2. Default type
+   - Issue: No default value for type, risking an undefined type attribute.
+   - Fix: Defaulted to "text" for predictable behavior.
+
+### [button.tsx component]
+1. Missing forwardRef
+   - Issue: Ref is not forwarded, which can block parent components or libraries like React Hook Form from interacting with the button.
+   - Fix: Used React.forwardRef to forward refs to the root element.
+2. Overloaded className merging
+   - Issue: className is passed inside buttonVariants instead of merged separately.
+   - Fix: Corrected by separating className merge using cn() around the result.
+
+### [badge.tsx component]
+1. Ref Forwarding
+   - Issue: Without forwardRef, focus management and library integrations become harder.
+   - Fix: Wrapped component in React.forwardRef to expose the ref of the underlying DOM node.
+2. Display name
+   - Issue: Component lacked a displayName for DevTools clarity.
+   - Fix: Added Badge.displayName = "Badge".
